@@ -1,0 +1,61 @@
+{
+  "name": "playground-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "gen": "graphql-codegen",
+    "build": "tsc",
+    "start": "ts-node src/index.ts"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
+    "@babel/preset-typescript": "^7.8.3",
+    "@graphql-codegen/cli": "^1.13.0",
+    "@graphql-codegen/typescript": "^1.13.0",
+    "@graphql-codegen/typescript-operations": "^1.13.0",
+    "@graphql-codegen/typescript-resolvers": "^1.13.0",
+    "@types/glob-to-regexp": "^0.4.0",
+    "@types/jest": "^25.1.4",
+    "@types/node": "^13.9.0",
+    "@types/shell-escape": "^0.2.0",
+    "@typescript-eslint/eslint-plugin": "^2.23.0",
+    "@typescript-eslint/parser": "^2.23.0",
+    "babel-jest": "^25.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "graphql-toolkit": "^0.7.5",
+    "jest": "^25.1.0",
+    "prettier": "^1.19.1",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@types/kuromoji": "^0.1.0",
+    "apollo-datasource": "^0.7.0",
+    "apollo-datasource-rest": "^0.8.0",
+    "apollo-server": "^2.11.0",
+    "dotenv": "^8.2.0",
+    "flexsearch": "^0.6.32",
+    "glob-to-regexp": "^0.4.1",
+    "graphql": "^14.6.0",
+    "graphql-schema-linter": "^0.2.4",
+    "kuromoji": "^0.1.2",
+    "shell-escape": "^0.2.0"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ],
+      "@babel/preset-typescript"
+    ]
+  }
+}

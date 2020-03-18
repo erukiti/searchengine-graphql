@@ -1,0 +1,15 @@
+type Query {
+  search(words: [String!]!): [SearchResult]
+}
+
+type Mutation {
+  add(type: String!, uri: String!, title: String, content: String!): Int!
+}
+
+type SearchResult {
+  id: Int!
+  type: String!
+  uri: String!
+  title: String
+  content: String!
+}
