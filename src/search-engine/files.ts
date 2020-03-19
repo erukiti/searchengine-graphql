@@ -3,7 +3,7 @@ import path from 'path'
 
 import globToRegexp from 'glob-to-regexp'
 
-import { SearchEngine, SearchIndex, generateId } from '.'
+import { SearchEngine, generateId } from '.'
 
 const converGitIgnoreToPatterns = (s: string) => {
   return s.split('\n').map(line => {
@@ -48,29 +48,24 @@ export const fetchFiles = async (
   searchEngine: SearchEngine,
   basePath: string,
 ) => {
-  const ignorePatterns = [globToRegexp('**/.git/**'), /\.json$/, /yarn\.lock$/]
+  const ignorePatterns = [globToRegexp('**/.git/**')]
   const filenames = await readDirRecursive(basePath, ignorePatterns)
-  const files = (
-    await Promise.all(
-      filenames.map(async filename => {
-        const buf = await fs.promises.readFile(filename)
-        const content = buf.toString('utf-8')
-        console.log(filename, !content.includes('\uFFFD'))
-        if (!content.includes('\uFFFD')) {
-          return {
-            id: generateId(),
-            type: 'file',
-            title: null,
-            uri: path.resolve(filename),
-            content,
-          }
-        } else {
-          null
-        }
-      }),
-    )
-  ).filter(file => file) as SearchIndex[]
   console.log('検索インデックス登録開始')
-  searchEngine.add(files.map(file => ({ id: generateId(), ...file })) as any)
+  await Promise.all(
+    filenames.map(async filename => {
+      const buf = await fs.promises.readFile(filename)
+      const content = buf.toString('utf-8')
+      console.log(filename, !content.includes('\uFFFD'))
+      if (!content.includes('\uFFFD')) {
+        searchEngine.add({
+          id: generateId(filename),
+          type: 'file',
+          title: null,
+          uri: path.resolve(filename),
+          content,
+        })
+      }
+    }),
+  )
   console.log('検索インデックス登録完了')
 }

@@ -1,17 +1,16 @@
-import { Index } from 'flexsearch'
-
 import { DataSource } from 'apollo-datasource'
+
 import { Context } from '../context'
 
-import { SearchIndex, generateId } from '../search-engine'
+import { SearchEngine, SearchIndex, generateId } from '../search-engine'
 
 export class SearchBackend extends DataSource<Context> {
-  private _flexsearch: Index<{ id: number } & SearchIndex>
+  private _flexsearch: SearchEngine
 
-  constructor(flexsearch: Index<{ id: number } & SearchIndex>) {
+  constructor(flexsearch: SearchEngine) {
     super()
     this._flexsearch = flexsearch
-    console.log('search backend!')
+    // console.log('search backend!')
   }
 
   search(words: string[]) {
@@ -23,10 +22,9 @@ export class SearchBackend extends DataSource<Context> {
     })
   }
 
-  add(data: SearchIndex) {
-    const id = generateId()
-    const { type, uri, content } = data
-    const title = data.title || ''
+  add(data: Pick<SearchIndex, 'title' | 'type' | 'uri' | 'content'>) {
+    const { title = '', type, uri, content } = data
+    const id = generateId(uri)
     this._flexsearch.add({ id, title, type, uri, content })
     return id
   }

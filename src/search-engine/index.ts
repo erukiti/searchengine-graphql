@@ -1,46 +1,22 @@
-import kuromoji from 'kuromoji'
-import Flexsearch, { TokenizerFn, Index } from 'flexsearch'
+import Flexsearch, { Index } from 'flexsearch'
 
 import { Maybe } from '../generated/graphql'
 
 export { generateId } from './utils'
+import { createTokenizer } from './tokenizer'
 
 export type SearchIndex = {
+  id: string
   type: string
   uri: string
   title: Maybe<string>
   content: string
 }
 
-const createTokenizer = () => {
-  return new Promise<kuromoji.Tokenizer<kuromoji.IpadicFeatures>>(
-    (resolve, reject) => {
-      kuromoji
-        .builder({
-          dicPath: './node_modules/kuromoji/dict',
-        })
-        .build((err, tokenizer) => {
-          if (err) {
-            reject(err)
-          } else {
-            resolve(tokenizer)
-          }
-        })
-    },
-  )
-}
-
-export type SearchEngine = Index<{ id: number } & SearchIndex>
+export type SearchEngine = Index<SearchIndex>
 
 export const createSearchEngine = async () => {
-  const tokenizer = await createTokenizer()
-
-  const tokenize: TokenizerFn = (s: string) => {
-    const tokenized = tokenizer.tokenize(s)
-    return tokenized.map(token => {
-      return token.surface_form
-    })
-  }
+  const tokenize = await createTokenizer()
   const flexsearch: SearchEngine = Flexsearch.create({
     tokenize,
     doc: {

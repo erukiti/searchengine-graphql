@@ -3,11 +3,11 @@ type Query {
 }
 
 type Mutation {
-  add(type: String!, uri: String!, title: String, content: String!): Int!
+  add(type: String!, uri: String!, title: String, content: String!): String!
 }
 
 type SearchResult {
-  id: Int!
+  id: String!
   type: String!
   uri: String!
   title: String
